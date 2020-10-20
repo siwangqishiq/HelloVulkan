@@ -8,6 +8,7 @@ build_dir:
 
 compile:build_dir
 	${CC} -c ${SRC_DIR}/main.cpp -o ${BUILD_DIR}/main.o -I include/
+	${CC} -c ${SRC_DIR}/HelloTriangleApp.cpp -o ${BUILD_DIR}/HelloTriangleApp.o -I include/
 
 link:compile
 	${CC} ${BUILD_DIR}/*.o -o ${BUILD_DIR}/main.exe -Llib -lglfw3dll -lvulkan-1
