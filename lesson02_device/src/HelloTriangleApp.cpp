@@ -75,6 +75,8 @@ void HelloTriangleApp::pickPhysicsDevice(){
     if(vkPhysicalDevice == VK_NULL_HANDLE){
         throw std::runtime_error("Fail to found a suitable GPU!");
     }
+
+    int32_t familyQueueCount = 0;
 }
 
 bool HelloTriangleApp::isDeviceSuitable(VkPhysicalDevice device){

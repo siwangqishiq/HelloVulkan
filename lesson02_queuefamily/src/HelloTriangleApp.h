@@ -15,6 +15,15 @@
 const int WIDTH = 800;
 const int HEIGHT = 600;
 
+//队列族查询返回
+struct QueueFamilyIndices{
+    int graphicsFamily = -1;
+
+    bool isComplete(){
+        return graphicsFamily >= 0;
+    }
+};
+
 class HelloTriangleApp{
 public:
     void run();
@@ -41,4 +50,7 @@ private:
     void pickPhysicsDevice();
 
     bool isDeviceSuitable(VkPhysicalDevice device);
+
+    //寻找合适的队列
+    QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 };

@@ -77,23 +77,38 @@ void HelloTriangleApp::pickPhysicsDevice(){
     }
 }
 
-bool HelloTriangleApp::isDeviceSuitable(VkPhysicalDevice device){
-    VkPhysicalDeviceProperties deviceProperties;
-    vkGetPhysicalDeviceProperties(device , &deviceProperties);
+QueueFamilyIndices HelloTriangleApp::findQueueFamilies(VkPhysicalDevice device){
+    QueueFamilyIndices indices;
 
-    VkPhysicalDeviceFeatures deviceFeatures;
-    vkGetPhysicalDeviceFeatures(device , &deviceFeatures);
+    uint32_t queueFamilyCount = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(device , &queueFamilyCount , nullptr);
+     std::cout << " queueFamilyCount " << queueFamilyCount << std::endl;
     
-    std::cout << "apiVersion    : " << deviceProperties.apiVersion << std::endl;
-    std::cout << "deviceID      : " << deviceProperties.deviceID << std::endl;
-    std::cout << "deviceName    : " << deviceProperties.deviceName << std::endl;
-    std::cout << "deviceType    : " << deviceProperties.deviceType << std::endl;
-    std::cout << "driverVersion : " << deviceProperties.driverVersion << std::endl;
-    //std::cout << "pipelineCacheUUID : " << deviceProperties.pipelineCacheUUID << std::endl;
-    //std::cout << "deviceName    : " << deviceProperties.deviceName << std::endl;
+    std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+    vkGetPhysicalDeviceQueueFamilyProperties(device , &queueFamilyCount , queueFamilies.data());
 
-    std::cout << "geometryShader support : " << deviceFeatures.geometryShader << std::endl;
-    return true;
+    for(int i = 0 ; i < queueFamilies.size();i++){
+        VkQueueFamilyProperties queueFamilyProp = queueFamilies[i];
+        std::cout << " queueCount " << queueFamilyProp.queueCount << std::endl;
+        std::cout << " queueFlags " << queueFamilyProp.queueFlags << std::endl;
+        std::cout << " timestampValidBits " << queueFamilyProp.timestampValidBits << std::endl;
+        VkExtent3D extent3d = queueFamilyProp.minImageTransferGranularity;
+        std::cout << " minImageTransferGranularity width " << extent3d.width << std::endl;
+        std::cout << " minImageTransferGranularity height " << extent3d.height << std::endl;
+        std::cout << " minImageTransferGranularity depth " << extent3d.depth << std::endl;
+
+        if(queueFamilyProp.queueCount > 0 && queueFamilyProp.queueFlags & VK_QUEUE_GRAPHICS_BIT){
+            indices.graphicsFamily = i;
+            break;
+        }
+    }
+
+    return indices;
+}
+
+bool HelloTriangleApp::isDeviceSuitable(VkPhysicalDevice device){
+    QueueFamilyIndices indices = findQueueFamilies(device);
+    return indices.isComplete();
 }
 
 void HelloTriangleApp::mainLoop(){
