@@ -24,6 +24,7 @@ void HelloTriangleApp::createInstance(){
     VkApplicationInfo appInfo = {};
 
     appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+    appInfo.pNext = nullptr;
     appInfo.pApplicationName = "Hello Vulkan";
     appInfo.applicationVersion = VK_MAKE_VERSION(1 , 0 , 0);
     appInfo.pEngineName = "No Engine";
@@ -39,6 +40,10 @@ void HelloTriangleApp::createInstance(){
     glfwExtension = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
     createInfo.enabledExtensionCount = glfwExtensionCount;
     createInfo.ppEnabledExtensionNames = glfwExtension;
+    
+    for(int i = 0 ; i < glfwExtensionCount ;i++){
+        std::cout << glfwExtension[i] << std::endl;
+    }//end for i
 
     createInfo.enabledLayerCount = 0;
     if(vkCreateInstance(&createInfo , nullptr, &vkInstance) != VK_SUCCESS){
